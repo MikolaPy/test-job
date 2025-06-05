@@ -1,0 +1,23 @@
+services:
+  api:
+    build: ./
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - bundle_api:/usr/local/bundle
+    command: rails s -b 0.0.0.0
+    depends_on:
+      - db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWD: postgres
+      POSTGRES_HOST: db
+
+  db:
+    image: postgres:alpine3.15
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  bundle_api:

@@ -1,4 +1,4 @@
-# Тестовое задание для MAXA Tech LLP
+# Test task for MAXA Tech LLP
 
 ## Getting started
 ```
@@ -11,7 +11,7 @@ $ docker compose up --build
 ```
 Make database migrations
 ```
-$ rake db:migrat
+$ rake db:migrate
 ```
 Run the test
 ```

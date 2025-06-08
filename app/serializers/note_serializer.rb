@@ -1,6 +1,6 @@
-class NoteSerializer
-  include JSONAPI::Serializer
+class NoteSerializer < BaseSerializer
 
   attribute :title
   attribute :body
+
 end

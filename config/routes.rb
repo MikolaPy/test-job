@@ -2,5 +2,10 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
 
-  resources :notes
+  namespace :api do
+    namespace :v1 do
+      resources :notes_controllers
+      resources :notes
+    end
+  end
 end

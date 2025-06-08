@@ -22,9 +22,34 @@ RSpec.configure do |config|
         version: 'v1'
       },
       paths: {},
+      components: {
+        schemas: {
+          note: {
+            type: 'object',
+            required: [:attributes, :type, :id, :links],
+            properties: {
+              attributes: {
+                type: 'object',
+                required: [:title, :body],
+                properties:{
+                  title: {
+                    type: :string,
+                    example: "Test title"
+                  },
+                  body: {
+                    type: :string,
+                    example: "test lorenen body",
+                  }
+                }
+              }
+            }
+          },
+        },
+      },
       servers: [
         {
-          url: 'https://{defaultHost}',
+          # url: 'http://{defaultHost}',
+          url: 'http://127.0.0.1:3000',
           variables: {
             defaultHost: {
               default: 'www.example.com'

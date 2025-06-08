@@ -1,5 +1,4 @@
-class NotesController < ApplicationController
-  include Pagy::Backend
+class Api::V1::NotesController < ApplicationController
   before_action :set_note, only: %i[ show update destroy ]
 
   def index
@@ -11,16 +10,15 @@ class NotesController < ApplicationController
     render json: JSONAPI::Serializer.serialize(@notes, links: links_hash, is_collection: true)
   end
 
-
-  def show
-    render json: @note
+  def show 
+    render json: JSONAPI::Serializer.serialize(@note)
   end
 
   def create
     @note = Note.new(note_params)
 
     if @note.save
-      render json: @note, status: :created, location: @note
+      render json: JSONAPI::Serializer.serialize(@note), status: :created
     else
       render json: @note.errors, status: :unprocessable_entity
     end
@@ -28,7 +26,7 @@ class NotesController < ApplicationController
 
   def update
     if @note.update(note_params)
-      render json: @note
+      render json: 'OK', status: :ok
     else
       render json: @note.errors, status: :unprocessable_entity
     end
@@ -36,6 +34,7 @@ class NotesController < ApplicationController
 
   def destroy
     @note.destroy!
+    render json: 'OK', status: :ok
   end
 
   private
@@ -52,6 +51,6 @@ class NotesController < ApplicationController
     end
 
     def note_params
-      params.expect(note: [:title, :body])
+      params.require(:data).permit(attributes: [:title, :body])
     end
 end

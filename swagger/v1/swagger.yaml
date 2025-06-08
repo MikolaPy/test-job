@@ -6,20 +6,41 @@ info:
 paths:
   "/notes":
     get:
-      summary: list notes
+      summary: notes
+      parameters:
+      - name: archived
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
         '200':
-          description: successful
+          description: list archived notes with search
     post:
-      summary: create note
+      summary: Creates a note
+      parameters: []
       responses:
-        '200':
-          description: successful
+        '201':
+          description: blog created
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  "$ref": "#/components/schemas/note"
   "/notes/{id}":
     parameters:
     - name: id
       in: path
-      description: id
       required: true
       schema:
         type: string
@@ -28,23 +49,54 @@ paths:
       responses:
         '200':
           description: successful
+        '404':
+          description: not found
     patch:
       summary: update note
-      responses:
-        '200':
-          description: successful
-    put:
-      summary: update note
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: successful
     delete:
       summary: delete note
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: successful
+components:
+  schemas:
+    note:
+      type: object
+      required:
+      - attributes
+      - type
+      - id
+      - links
+      properties:
+        attributes:
+          type: object
+          required:
+          - title
+          - body
+          properties:
+            title:
+              type: string
+              example: Test title
+            body:
+              type: string
+              example: test lorenen body
 servers:
-- url: https://{defaultHost}
+- url: http://127.0.0.1:3000
   variables:
     defaultHost:
       default: www.example.com

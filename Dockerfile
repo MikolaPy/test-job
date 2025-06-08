@@ -13,8 +13,11 @@ ARG RAILS_VERSION
 # Install Rails based on the version specified but if not specified, install the latest version.
 # RUN if [ -z "$RAILS_VERSION" ] ; then gem install rails ; else gem install rails -v $RAILS_VERSION ; fi
 
+
+COPY ./ /app
+
 WORKDIR /app
 
-COPY . .
+RUN bundle install
 
 CMD ["rails", "s"]

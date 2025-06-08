@@ -1,19 +1,21 @@
 class NotesController < ApplicationController
+  include Pagy::Backend
   before_action :set_note, only: %i[ show update destroy ]
 
-  # GET /notes
   def index
-    @notes = Note.all
+    @notes = Note.where(archived: archived_param).search(search_param)
+    @pagy, @notes = pagy(@notes)
 
-    render json: @notes
+    links_hash = pagy_jsonapi_links(@pagy)
+
+    render json: JSONAPI::Serializer.serialize(@notes, links: links_hash, is_collection: true)
   end
 
-  # GET /notes/1
+
   def show
     render json: @note
   end
 
-  # POST /notes
   def create
     @note = Note.new(note_params)
 
@@ -24,7 +26,6 @@ class NotesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /notes/1
   def update
     if @note.update(note_params)
       render json: @note
@@ -33,19 +34,24 @@ class NotesController < ApplicationController
     end
   end
 
-  # DELETE /notes/1
   def destroy
     @note.destroy!
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    def search_param
+      params[:search]
+    end
+
+    def archived_param
+      params[:archived].present? && params[:archived].downcase == 'true'
+    end
+
     def set_note
       @note = Note.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def note_params
-      params.expect(note: [ :title, :body, :archived ])
+      params.expect(note: [:title, :body])
     end
 end

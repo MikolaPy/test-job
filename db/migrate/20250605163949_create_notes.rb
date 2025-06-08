@@ -3,7 +3,7 @@ class CreateNotes < ActiveRecord::Migration[8.0]
     create_table :notes do |t|
       t.string :title
       t.text :body
-      t.boolean :archived
+      t.boolean :archived, default: false
 
       t.timestamps
     end

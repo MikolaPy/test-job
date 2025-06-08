@@ -1,4 +1,4 @@
-# Test task for MAXA Tech LLP
+# Решение тестого задания MAXA Tech LLP
 
 ## Getting started
 ```
